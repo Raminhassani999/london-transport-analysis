@@ -148,3 +148,24 @@ print(
         ],
     ]
 )
+
+df["calculated_days"] = (
+    df["period_ending"] - df["period_beginning"]
+).dt.days + 1
+
+output_file = Path("data/processed/tfl_journeys_clean.csv")
+
+output_file.parent.mkdir(parents=True, exist_ok=True)
+
+df = df.drop(columns=[
+    "expected_financial_year",
+    "label_financial_year",
+    "financial_year_matches",
+])
+
+df.to_csv(output_file, index=False)
+
+print(f"\nCleaned dataset saved to: {output_file}")
+print("Final dataset shape:", df.shape)
+print("\nFinal columns:")
+print(df.columns.tolist())
